@@ -21,5 +21,11 @@ The repository includes the following:
 
 For any details, contact Shiv Surya- shiv.surya314@gmail.com
 
+Contributors-
+Shiv Surya
+Sneha Chhabria
+Remo George Joseph
+Tushar Prakash
+Prof.M.N Dinesh
 
 
