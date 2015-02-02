@@ -1,0 +1,179 @@
+#include <Servo.h>
+Servo myservo; // create servo object myservo of class Servo to control a servo
+motor
+//Assign microcontroller pins to variables
+int motorPin1 = 10;
+int motorPin2 = 11;
+int motorPin3 = 12;
+int motorPin4 = 13;
+int motorPin5 = 5;
+int motorPin6 = 6;
+int motorPin7 = 8;
+int motorPin8 = 9;
+
+#define thresh 0.13
+
+
+//initialize flags and counters
+int f=1;
+int lcount=0;
+int rcount=0;
+int delay=0;
+void setup()
+{
+myservo.attach(6); // attaches the servo on pin 6 to the servo object myservo
+myservo.write(0); //initialize servo position to 0 degrees
+
+/switch off indicator led’s
+digitalWrite(motorPin7, LOW);
+digitalWrite(motorPin8, LOW);
+// conFig. pin status for microcontroller pins
+pinMode(motorPin1, OUTPUT);
+pinMode(motorPin2, OUTPUT);
+pinMode(motorPin3, OUTPUT);
+pinMode(motorPin4, OUTPUT);
+pinMode(motorPin5, OUTPUT);
+pinMode(motorPin6, OUTPUT);
+pinMode(motorPin7, OUTPUT);
+pinMode(motorPin8, OUTPUT);
+digitalWrite(motorPin5, HIGH);
+digitalWrite(motorPin6, HIGH);
+//Initialize primary motor position
+digitalWrite(motorPin1, LOW);
+digitalWrite(motorPin2, HIGH);
+delay(1000);
+
+digitalWrite(motorPin2,LOW);
+digitalWrite(motorPin1, LOW);
+delay(2000);
+
+}
+
+void loop()
+{
+f=1;
+while(f==1)
+{
+  // sample first EOG output
+  int sensorValue1 = analogRead(A5);
+  float voltage1 = sensorValue1 * (5.0 / 1023.0);
+  //wait for 1 second
+  delay(1000);
+  // sample second EOG output
+  int sensorValue2 = analogRead(A5);
+  float voltage2 = sensorValue2 * (5.0 / 1023.0);
+  delay=0;
+  if((voltage2-voltage1)>thresh)
+  {
+   f=0;
+  lcount=lcount-1;
+  rcount=rcount+1;
+  delay=delay+(rcount*5);
+  rotate_right(delay);
+  }
+  else if((voltage1-voltage2)>thresh)
+  {
+  f=0;
+  lcount=lcount+1;
+  rcount=rcount-1;
+  delay=delay+(lcount*5);
+  rotate_left(delay);
+  }
+ }
+ delay(1000);
+digitalWrite(motorPin7, LOW);
+digitalWrite(motorPin8, LOW);
+}
+
+
+void rotate_left(delay)
+{
+digitalWrite(motorPin7, HIGH);
+//Rotate primary motor counter-clockwise
+digitalWrite(motorPin1,LOW);
+digitalWrite(motorPin2,HIGH);
+delay(1000+delay);
+//Stop primary motor rotation
+digitalWrite(motorPin2,LOW);
+digitalWrite(motorPin1, LOW);
+delay(3000);
+// Rotate wheel counter-clockwise
+digitalWrite(motorPin3,LOW);
+digitalWrite(motorPin4, HIGH);
+delay(1300);
+// Stop wheel
+digitalWrite(motorPin3,LOW);
+digitalWrite(motorPin4, LOW);
+delay(2000);
+// Set servo to 60 degree to hold folded page
+myservo.write(60);
+delay(1000);
+//lift wheel off page
+digitalWrite(motorPin1,HIGH);
+digitalWrite(motorPin2,LOW);
+delay(500);
+// Set servo to 180 degree to flip the page
+myservo.write(180);
+delay(1000);
+//return wheel to page surface
+digitalWrite(motorPin1,LOW);
+digitalWrite(motorPin2,HIGH);
+delay(500);
+// Set servo to 0 degree (original position)
+myservo.write(0);
+delay(1000);
+//Bring arm to rest position
+digitalWrite(motorPin2,LOW);
+digitalWrite(motorPin1,HIGH);
+delay(1000+delay);
+}
+//***************************************************************************
+
+void rotate_right(delay)
+{
+digitalWrite(motorPin8, HIGH);
+//Rotate primary motor clockwise
+digitalWrite(motorPin1,HIGH);
+digitalWrite(motorPin2, LOW);
+delay(3700+delay);
+//Stop Primary motor
+digitalWrite(motorPin2,LOW);
+digitalWrite(motorPin1, LOW);
+delay(2000);
+
+// Set servo to 180 degree
+myservo.write(180);
+delay(1000);
+// Rotate wheel clockwise
+digitalWrite(motorPin3,HIGH);
+digitalWrite(motorPin4, LOW);
+delay(1300);
+// Stop wheel
+digitalWrite(motorPin3,LOW);
+digitalWrite(motorPin4, LOW);
+delay(2000);
+// Set servo to 120 degree to hold folded page
+myservo.write(120);
+delay(1000);
+//lift wheel off page
+digitalWrite(motorPin1,LOW);
+digitalWrite(motorPin2,HIGH);
+delay(500);
+// Set servo to 0 degree to flip the page
+myservo.write(0);
+delay(1000);
+//return wheel to page surface
+digitalWrite(motorPin1,LOW);
+digitalWrite(motorPin2,HIGH);
+delay(500);
+//Rotate primary motor counter-clockwise
+digitalWrite(motorPin2,HIGH);
+digitalWrite(motorPin1, LOW);
+delay(3700);
+//Stop primary motor
+digitalWrite(motorPin2,LOW);
+digitalWrite(motorPin1, LOW);
+delay(2000);
+}
+
+
