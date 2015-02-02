@@ -3,10 +3,18 @@ This project implements an automatic page turner with eye tracking based on EEG(
 
 The original project was implemented in Embedded C. We created a simpler version on Arduino platform so that others can use that as a starting point of work if interested.
 
+My role in the project were: 
+-> Development of initial concept with Prof.Dinesh M.N(http://www.rvce.edu.in/eee_dinesh.php) 
+-> Designed and built complete mechanical structure of the robotic page turner.
+-> Signal Conditioning
+-> Micro-controller coding.
+
+
 The repository includes the following:
 1)Project Report
 2)Demonstration video
 3)Arduino source code
+
 
 For any details, contact Shiv Surya- shiv.surya314@gmail.com
 
